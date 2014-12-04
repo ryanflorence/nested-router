@@ -1,5 +1,3 @@
-/** @jsx */
-
 var expect = require('expect');
 var { map, run } = require('./index');
 

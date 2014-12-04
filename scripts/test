@@ -1,1 +1,2 @@
-mocha run-tests.js --watch "$@"
+mocha --require 6to5/register tests.js "$@"
+
