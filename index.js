@@ -8,7 +8,7 @@ var map = exports.map = (getMatches, parent) => {
       getChildMatches = props;
     var route = { path, props, parent };
     route.matcher = makePathMatcher(path);
-    route.children = (getChildMatches && map(getChildMatches, route) || []);
+    route.children = getChildMatches ? map(getChildMatches, route) : [];
     routes.push(route);
   });
   return routes;
@@ -17,10 +17,12 @@ var map = exports.map = (getMatches, parent) => {
 var run = exports.run = (routes, path, callback) => {
   var { pathname, query } = parsePath(path);
   var route = matchDeepestRoute(routes, pathname);
-  var params = parseParams(route, pathname);
-  var query = parseQuery(query);
-  var routes = flattenRoute(route);
-  callback({ path, routes, params, query });
+  callback({
+    path,
+    params: parseParams(route, pathname),
+    query: parseQuery(query),
+    routes: flattenRoute(route)
+  });
 };
 
 var parseQuery = (query) => {
