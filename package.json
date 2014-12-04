@@ -1,0 +1,27 @@
+{
+  "name": "nested-router",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "6to5": "1.14.10",
+    "expect": "^1.1.0",
+    "karma": "0.12.28",
+    "karma-browserify": "1.0.0",
+    "karma-chrome-launcher": "0.1.7",
+    "karma-cli": "0.0.4",
+    "karma-mocha": "0.1.9",
+    "mocha": "2.0.1",
+    "node-jsx": "0.12.4",
+    "react-tools": "0.12.1",
+    "reactify": "0.17.1"
+  },
+  "dependencies": {
+    "clone": "0.1.19"
+  }
+}
