@@ -20,6 +20,7 @@
     "mocha": "2.0.1"
   },
   "dependencies": {
-    "clone": "0.1.19"
+    "path-to-regexp": "1.0.1",
+    "qs": "2.3.3"
   }
 }

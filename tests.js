@@ -16,20 +16,20 @@ describe('matching', () => {
 
   it('matches shallowest routes', (done) => {
     run(routes, '/b', (state) => {
-      expect(state.matches.length).toEqual(1);
+      expect(state.routes.length).toEqual(1);
       expect(state.path).toEqual('/b');
-      expect(state.matches[0].props.name).toEqual('b');
+      expect(state.routes[0].props.name).toEqual('b');
       done();
     });
   });
 
   it('matches deepest routes', (done) => {
     run(routes, '/a/b/b', (state) => {
-      expect(state.matches.length).toEqual(3);
+      expect(state.routes.length).toEqual(3);
       expect(state.path).toEqual('/a/b/b');
-      expect(state.matches[0].props.name).toEqual('a');
-      expect(state.matches[1].props.name).toEqual('a.b');
-      expect(state.matches[2].props.name).toEqual('a.b.b');
+      expect(state.routes[0].props.name).toEqual('a');
+      expect(state.routes[1].props.name).toEqual('a.b');
+      expect(state.routes[2].props.name).toEqual('a.b.b');
       done();
     });
   });
@@ -38,7 +38,9 @@ describe('matching', () => {
     run(routes, '/a/b', (state) => {
       expect(state).toEqual({
         path: '/a/b',
-        matches: [
+        params: {},
+        query: {},
+        routes: [
           { path: '/a', props: { name: 'a' } },
           { path: '/a/b', props: { name: 'a.b' } }
         ]
@@ -47,7 +49,55 @@ describe('matching', () => {
     });
   });
 
-  it('passes a copy of router data');
-
+  it('passes a copy of route data');
   it('does not copy user props');
+  it('respects trailing slashes by default');
+  it('optionally ignores trailing slashes');
 });
+
+describe('parameter parsing', () => {
+  var routes = map((match) => {
+    match('/:flavor', { name: 'a'}, (match) => {
+      match('/:flavor/:food', { name: 'a.b'});
+    });
+  });
+
+  it('generally works', (done) => {
+    run(routes, '/cheese/cake', (state) => {
+      expect(state.params).toEqual({flavor: 'cheese', food: 'cake'});
+      done();
+    });
+  });
+});
+
+describe('match', () => {
+  it('has optional props', (done) => {
+    var routes = map((match) => {
+      match('/', (match) => {
+        match('/foo');
+      });
+    });
+    run(routes, '/foo', (state) => {
+      expect(state.routes.length).toEqual(2);
+      done();
+    });
+  });
+});
+
+describe('query parsing', () => {
+  var routes = map((match) => {
+    match('/', (match) => {
+      match('/foo', { name: 'foo'});
+    });
+  });
+
+  it('generally works', (done) => {
+    run(routes, '/foo?bar=baz', (state) => {
+      expect(state.query).toEqual({bar: 'baz'});
+      done();
+    });
+  });
+});
+
+it('deals with hashes and hashes with query strings');
+
