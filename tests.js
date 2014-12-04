@@ -49,10 +49,6 @@ describe('matching', () => {
     });
   });
 
-  it('passes a copy of route data');
-  it('does not copy user props');
-  it('respects trailing slashes by default');
-  it('optionally ignores trailing slashes');
 });
 
 describe('parameter parsing', () => {
@@ -99,5 +95,8 @@ describe('query parsing', () => {
   });
 });
 
-it('deals with hashes and hashes with query strings');
+it('sends a copy of route data so it cannot be mutated');
+it('does not copy user props, in case they want them mutable');
+it('respects trailing slashes by default');
+it('optionally ignores trailing slashes');
 
