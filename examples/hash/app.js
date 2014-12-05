@@ -26,7 +26,7 @@ var user = (props, children) => {
   `;
 };
 
-var description = (props, child) => {
+var description = (props) => {
   return `
     <p>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod

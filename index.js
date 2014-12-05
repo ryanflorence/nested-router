@@ -3,7 +3,7 @@ var qs = require('qs');
 
 exports.version = require('./package.json').version;
 
-var map = exports.map = (getMatches) => {
+exports.map = (getMatches) => {
   var routes = mapRoutes(getMatches);
   return (path) => matchPathToRoutes(path, routes);
 };
@@ -74,5 +74,4 @@ var getHandlers = (route) => {
   }
   return handlers;
 };
-
 
