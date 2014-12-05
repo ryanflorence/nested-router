@@ -60,7 +60,6 @@ describe('matching', () => {
     expect(matchPath('/foo/bar').handlers.length).toEqual(2);
     expect(matchPath('/foo/bar/baz').handlers.length).toEqual(3);
   });
-
 });
 
 describe('parameter parsing', () => {
