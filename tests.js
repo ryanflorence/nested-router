@@ -71,11 +71,6 @@ describe('query parsing', () => {
   });
 });
 
-it('sends a copy of route data so it cannot be mutated');
-it('does not copy user handler, in case they want them mutable');
-it('respects trailing slashes by default');
-it('optionally ignores trailing slashes');
-
 if (BROWSER) {
   describe('startHash', () => {
     beforeEach(() => {
@@ -99,4 +94,9 @@ if (BROWSER) {
     //});
   });
 }
+
+it('handles no matches gracefully');
+it('respects trailing slashes by default');
+it('optionally ignores trailing slashes');
+
 
