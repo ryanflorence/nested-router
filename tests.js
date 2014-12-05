@@ -1,9 +1,5 @@
 var expect = require('expect');
-var { map, startHash } = require('./index');
-
-var BROWSER = 'object' === typeof window;
-if (!BROWSER)
-  console.warn('BROWSER TESTS WILL NOT BE RUN BECAUSE YOU ARE NOT IN A BROWSER');
+var { map } = require('./index');
 
 describe('matching', () => {
   var matchPath = map((match) => {
@@ -70,30 +66,6 @@ describe('query parsing', () => {
     expect(matchInfo.query).toEqual({bar: 'baz'});
   });
 });
-
-if (BROWSER) {
-  describe('startHash', () => {
-    beforeEach(() => {
-      window.location.hash = '';
-    });
-
-    it('callsback with the hash url', (done) => {
-      window.location.hash = '/foo/bar';
-      var listener = startHash((path) => {
-        expect(path).toEqual('/foo/bar');
-        listener.dispose();
-        done();
-      });
-    });
-
-    //it('replaces the url', (done) => {
-      //startHash((path, actions) => {
-        //expect(path).toEqual('/foo/bar');
-        //done();
-      //});
-    //});
-  });
-}
 
 it('handles no matches gracefully');
 it('respects trailing slashes by default');
