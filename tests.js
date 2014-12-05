@@ -19,24 +19,24 @@ describe('matching', () => {
   });
 
   it('matches shallowest routes', () => {
-    var state = matchPath('/b');
-    expect(state.handlers.length).toEqual(1);
-    expect(state.path).toEqual('/b');
-    expect(state.handlers[0].name).toEqual('b');
+    var matchInfo = matchPath('/b');
+    expect(matchInfo.handlers.length).toEqual(1);
+    expect(matchInfo.path).toEqual('/b');
+    expect(matchInfo.handlers[0].name).toEqual('b');
   });
 
   it('matches deepest routes', () => {
-    var state = matchPath('/a/b/b');
-    expect(state.handlers.length).toEqual(3);
-    expect(state.path).toEqual('/a/b/b');
-    expect(state.handlers[0].name).toEqual('a');
-    expect(state.handlers[1].name).toEqual('a.b');
-    expect(state.handlers[2].name).toEqual('a.b.b');
+    var matchInfo = matchPath('/a/b/b');
+    expect(matchInfo.handlers.length).toEqual(3);
+    expect(matchInfo.path).toEqual('/a/b/b');
+    expect(matchInfo.handlers[0].name).toEqual('a');
+    expect(matchInfo.handlers[1].name).toEqual('a.b');
+    expect(matchInfo.handlers[2].name).toEqual('a.b.b');
   });
 
-  it('calls back with a proper-looking state', () => {
-    var state = matchPath('/a/b');
-    expect(state).toEqual({
+  it('calls back with a proper-looking match info', () => {
+    var matchInfo = matchPath('/a/b');
+    expect(matchInfo).toEqual({
       path: '/a/b',
       params: {},
       query: {},
@@ -53,8 +53,8 @@ describe('parameter parsing', () => {
   });
 
   it('generally works', () => {
-    var state = matchPath('/cheese/cake');
-    expect(state.params).toEqual({flavor: 'cheese', food: 'cake'});
+    var matchInfo = matchPath('/cheese/cake');
+    expect(matchInfo.params).toEqual({flavor: 'cheese', food: 'cake'});
   });
 });
 
@@ -66,8 +66,8 @@ describe('query parsing', () => {
   });
 
   it('generally works', () => {
-    var state = matchPath('/foo?bar=baz');
-    expect(state.query).toEqual({bar: 'baz'});
+    var matchInfo = matchPath('/foo?bar=baz');
+    expect(matchInfo.query).toEqual({bar: 'baz'});
   });
 });
 

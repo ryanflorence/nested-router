@@ -3,7 +3,7 @@ var qs = require('qs');
 
 var map = module.exports = (getMatches) => {
   var routes = mapRoutes(getMatches);
-  return (path) => match(routes, path);
+  return (path) => matchPathToRoutes(path, routes);
 };
 
 var mapRoutes = (getMatches, parent) => {
@@ -23,8 +23,7 @@ var makePathMatcher = (path) => {
   return { keys, regexp };
 };
 
-
-var match = (routes, path, callback) => {
+var matchPathToRoutes = (path, routes) => {
   var { pathname, query } = parsePath(path);
   var route = matchDeepestRoute(routes, pathname);
   return {
