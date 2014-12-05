@@ -1,4 +1,4 @@
-var { map } = require('nested-router');
+var { map, match } = require('nested-router');
 
 var link = (path, text) => {
   return `<a href="${path}">${text}</a>`;
@@ -44,7 +44,7 @@ var notFound = (props) => {
   return `<h1>Not found :(</h1>`;
 };
 
-var matchPath = map((match) => {
+var routes = map((match) => {
   match('/', app, (match) => {
     match('/contacts/:id', user, (match) => {
       match('/contacts/:id/description', description);
@@ -55,9 +55,9 @@ var matchPath = map((match) => {
 
 var render = () => {
   var path = window.location.hash.substr(1);
-  var matchInfo = matchPath(path);
-  var html = matchInfo.handlers.reduceRight((html, handler, index) => {
-    return handler(matchInfo, html);
+  var { params, handler } = match(path, routes);
+  var html = handlers.reduceRight((html, handler, index) => {
+    return handler({ params }, html);
   }, '');
   document.getElementById('app').innerHTML = html;
 };

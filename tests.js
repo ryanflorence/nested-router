@@ -1,8 +1,8 @@
 var expect = require('expect');
-var { map } = require('./index');
+var { map, match } = require('./index');
 
 describe('matching', () => {
-  var matchPath = map((match) => {
+  var routes = map((match) => {
     match('/a', { name: 'a' }, (match) => {
       match('/a/a', { name: 'a.a' });
       match('/a/b', { name: 'a.b' }, (match) => {
@@ -15,14 +15,14 @@ describe('matching', () => {
   });
 
   it('matches shallowest routes', () => {
-    var matchInfo = matchPath('/b');
+    var matchInfo = match('/b', routes);
     expect(matchInfo.handlers.length).toEqual(1);
     expect(matchInfo.path).toEqual('/b');
     expect(matchInfo.handlers[0].name).toEqual('b');
   });
 
   it('matches deepest routes', () => {
-    var matchInfo = matchPath('/a/b/b');
+    var matchInfo = match('/a/b/b', routes);
     expect(matchInfo.handlers.length).toEqual(3);
     expect(matchInfo.path).toEqual('/a/b/b');
     expect(matchInfo.handlers[0].name).toEqual('a');
@@ -31,7 +31,7 @@ describe('matching', () => {
   });
 
   it('returns proper-looking match info', () => {
-    var matchInfo = matchPath('/a/b');
+    var matchInfo = match('/a/b', routes);
     expect(matchInfo).toEqual({
       path: '/a/b',
       params: {},
@@ -44,52 +44,50 @@ describe('matching', () => {
   });
 
   it('returns null when there is no match', () => {
-    var matchInfo = matchPath('/bersterbleghhthphht');
+    var matchInfo = match('/bersterbleghhthphht', routes);
     expect(matchInfo).toBe(null);
   });
 
   it('concats nested paths', () => {
-    var matchPath = map((match) => {
+    var routes = map((match) => {
       match('/foo', null, (match) => {
         match('bar', null, (match) => {
           match('baz', null);
         });
       });
     });
-    expect(matchPath('/foo').handlers.length).toEqual(1);
-    expect(matchPath('/foo/bar').handlers.length).toEqual(2);
-    expect(matchPath('/foo/bar/baz').handlers.length).toEqual(3);
+    expect(match('/foo', routes).handlers.length).toEqual(1);
+    expect(match('/foo/bar', routes).handlers.length).toEqual(2);
+    expect(match('/foo/bar/baz', routes).handlers.length).toEqual(3);
   });
 });
 
 describe('parameter parsing', () => {
-  var matchPath = map((match) => {
+  var routes = map((match) => {
     match('/:flavor', { name: 'a'}, (match) => {
       match('/:flavor/:food', { name: 'a.b'});
     });
   });
 
   it('generally works', () => {
-    var matchInfo = matchPath('/cheese/cake');
+    var matchInfo = match('/cheese/cake', routes);
     expect(matchInfo.params).toEqual({flavor: 'cheese', food: 'cake'});
   });
 });
 
 describe('query parsing', () => {
-  var matchPath = map((match) => {
+  var routes = map((match) => {
     match('/', null, (match) => {
       match('/foo', null);
     });
   });
 
   it('generally works', () => {
-    var matchInfo = matchPath('/foo?bar=baz');
+    var matchInfo = match('/foo?bar=baz', routes);
     expect(matchInfo.query).toEqual({bar: 'baz'});
   });
 });
 
-it('handles no matches gracefully');
 it('respects trailing slashes by default');
 it('optionally ignores trailing slashes');
-
 

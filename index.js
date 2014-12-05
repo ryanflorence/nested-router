@@ -3,22 +3,28 @@ var qs = require('qs');
 
 exports.version = require('./package.json').version;
 
-exports.map = (getMatches) => {
-  var routes = mapRoutes(getMatches);
-  return (path) => matchPathToRoutes(path, routes);
-};
-
-var mapRoutes = (getMatches, parent) => {
+var map = exports.map = (getMatches, parent) => {
   var routes = [];
   getMatches((path, handler, getChildMatches) => {
     path = inheritPath(path, parent && parent.path);
     var route = { path, handler, parent };
     route.matcher = makePathMatcher(path);
     route.children = getChildMatches ?
-      mapRoutes(getChildMatches, route) : [];
+      map(getChildMatches, route) : [];
     routes.push(route);
   });
   return routes;
+};
+
+var match = exports.match = (path, routes) => {
+  var { pathname, query } = parsePath(path);
+  var route = matchDeepestRoute(routes, pathname);
+  return route ? {
+    path,
+    params: parseParams(route, pathname),
+    query: parseQuery(query),
+    handlers: getHandlers(route)
+  } : null;
 };
 
 var inheritPath = (childPath, parentPath) => {
@@ -30,17 +36,6 @@ var makePathMatcher = (path) => {
   var keys = [];
   var regexp = pathToRegexp(path, keys);
   return { keys, regexp };
-};
-
-var matchPathToRoutes = (path, routes) => {
-  var { pathname, query } = parsePath(path);
-  var route = matchDeepestRoute(routes, pathname);
-  return route ? {
-    path,
-    params: parseParams(route, pathname),
-    query: parseQuery(query),
-    handlers: getHandlers(route)
-  } : null;
 };
 
 var parseQuery = (query) => {
