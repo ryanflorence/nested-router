@@ -30,7 +30,7 @@ describe('matching', () => {
     expect(matchInfo.handlers[2].name).toEqual('a.b.b');
   });
 
-  it('calls back with a proper-looking match info', () => {
+  it('returns proper-looking match info', () => {
     var matchInfo = matchPath('/a/b');
     expect(matchInfo).toEqual({
       path: '/a/b',
@@ -38,6 +38,19 @@ describe('matching', () => {
       query: {},
       handlers: [{ name: 'a' }, { name: 'a.b' }]
     });
+  });
+
+  it('concats nested paths', () => {
+    var matchPath = map((match) => {
+      match('/foo', null, (match) => {
+        match('bar', null, (match) => {
+          match('baz', null);
+        });
+      });
+    });
+    expect(matchPath('/foo').handlers.length).toEqual(1);
+    expect(matchPath('/foo/bar').handlers.length).toEqual(2);
+    expect(matchPath('/foo/bar/baz').handlers.length).toEqual(3);
   });
 });
 

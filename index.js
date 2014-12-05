@@ -11,12 +11,18 @@ exports.map = (getMatches) => {
 var mapRoutes = (getMatches, parent) => {
   var routes = [];
   getMatches((path, handler, getChildMatches) => {
+    path = inheritPath(path, parent && parent.path);
     var route = { path, handler, parent };
     route.matcher = makePathMatcher(path);
     route.children = getChildMatches ? mapRoutes(getChildMatches, route) : [];
     routes.push(route);
   });
   return routes;
+};
+
+var inheritPath = (childPath, parentPath) => {
+  return (parentPath && childPath.charAt(0) !== '/') ?
+    `${parentPath}/${childPath}` : childPath;
 };
 
 var makePathMatcher = (path) => {
