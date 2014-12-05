@@ -36,8 +36,16 @@ describe('matching', () => {
       path: '/a/b',
       params: {},
       query: {},
-      handlers: [{ name: 'a' }, { name: 'a.b' }]
+      handlers: [
+        { name: 'a' },
+        { name: 'a.b' }
+      ]
     });
+  });
+
+  it('returns null when there is no match', () => {
+    var matchInfo = matchPath('/bersterbleghhthphht');
+    expect(matchInfo).toBe(null);
   });
 
   it('concats nested paths', () => {
@@ -52,6 +60,7 @@ describe('matching', () => {
     expect(matchPath('/foo/bar').handlers.length).toEqual(2);
     expect(matchPath('/foo/bar/baz').handlers.length).toEqual(3);
   });
+
 });
 
 describe('parameter parsing', () => {
