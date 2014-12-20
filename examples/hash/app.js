@@ -44,8 +44,16 @@ var notFound = (props) => {
   return `<h1>Not found :(</h1>`;
 };
 
+var index = (props) => {
+  return `<h2>hello and welcome</h2>`;
+};
+
+
+var matchIndex = (match) => match('');
+
 var routes = map((match) => {
   match('/', app, (match) => {
+    matchIndex(match, index);
     match('/contacts/:id', user, (match) => {
       match('/contacts/:id/description', description);
     });
@@ -55,7 +63,7 @@ var routes = map((match) => {
 
 var render = () => {
   var path = window.location.hash.substr(1);
-  var { params, handler } = match(path, routes);
+  var { params, handlers } = match(path, routes);
   var html = handlers.reduceRight((html, handler, index) => {
     return handler({ params }, html);
   }, '');
