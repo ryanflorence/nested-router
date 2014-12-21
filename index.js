@@ -1,9 +1,7 @@
 var pathToRegexp = require('path-to-regexp');
 var qs = require('qs');
 
-exports.version = require('./package.json').version;
-
-var map = exports.map = (getMatches, parent) => {
+var map = (getMatches, parent) => {
   var routes = [];
   getMatches((path, handler, getChildMatches) => {
     path = inheritPath(path, parent && parent.path);
@@ -16,7 +14,7 @@ var map = exports.map = (getMatches, parent) => {
   return routes;
 };
 
-var match = exports.match = (path, routes) => {
+var match = (path, routes) => {
   var { pathname, query } = parsePath(path);
   var route = matchDeepestRoute(routes, pathname);
   return route ? {
@@ -26,6 +24,10 @@ var match = exports.match = (path, routes) => {
     handlers: getHandlers(route)
   } : null;
 };
+
+module.exports = { match, map };
+
+////////////////////////////////////////////////////////////////////////////////
 
 var inheritPath = (childPath, parentPath) => {
   return (parentPath && childPath.charAt(0) !== '/') ?
