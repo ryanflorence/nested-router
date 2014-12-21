@@ -3,19 +3,12 @@ var { map, match } = require('nested-router');
 
 var location = require('./utils/location');
 var fetch = require('./utils/fetch');
-var validate = require('./utils/validate');
+var validateTransition = require('./utils/validate');
 
 var users = require('./routes/users');
 var user = require('./routes/user');
 var newUser = require('./routes/newUser');
 var notFound = require('./routes/notFound');
-
-var transient = {
-  ref: {},
-  handlers: [],
-  aborted: false,
-  path: ''
-};
 
 var routes = map((defRoute) => {
   defRoute('/user/new', newUser);
@@ -25,19 +18,27 @@ var routes = map((defRoute) => {
   defRoute('/(.*)', notFound);
 });
 
-var render = () => {
-  if (transient.aborted) {
-    transient.aborted = false;
-    return;
-  }
+var transient = {
+  ref: {},
+  handlers: [],
+  aborted: false,
+  path: ''
+};
 
-  var path = window.location.hash.substr(1);
-  var { handlers, params, path } = match(path, routes);
+var restoreUrl = () => {
+  transient.aborted = true;
+  location.push(transient.path);
+};
 
-  if (!validate(transient.handlers, transient.ref)) {
-    transient.aborted = true;
-    return location.push(transient.path);
-  }
+var handleTransition = () => {
+  if (transient.aborted)
+    return (transient.aborted = false);
+
+  if (!validateTransition(transient.handlers, transient.ref))
+    return restoreUrl();
+
+  var path = location.getPath();
+  var { handlers, params } = match(path, routes);
 
   transient.handlers = handlers;
   transient.path = path;
@@ -50,6 +51,6 @@ var render = () => {
   });
 };
 
-window.addEventListener('hashchange', render, false);
-render();
+window.addEventListener('hashchange', handleTransition, false);
+handleTransition();
 

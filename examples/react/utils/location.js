@@ -13,3 +13,7 @@ exports.push = (path) => {
   return loc.hash = path;
 };
 
+exports.getPath = () => {
+  return window.location.hash.substr(1);
+};
+
