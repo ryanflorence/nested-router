@@ -5,7 +5,7 @@ exports.name = 'users';
 
 exports.fetch = (params) => {
   return api.get('/contacts').then((res) => {
-    return res.data.contacts;
+    return res.contacts;
   });
 };
 
@@ -21,7 +21,10 @@ exports.render = (props, child) => {
   return (
     <div>
       <h1>Users</h1>
-      <ul>{links}</ul>
+      <ul>
+        <li><a href="#/user/new">Add User</a></li>
+        {links}
+      </ul>
       {child}
     </div>
   );
