@@ -19,7 +19,7 @@ exports.render = (props, child) => {
   return (
     <div>
       <h2>{user.first} {user.last}</h2>
-      <img key="avatar" src={user.avatar} height="100"/>
+      <img key={user.id} src={user.avatar} height="100"/>
     </div>
   );
 };
