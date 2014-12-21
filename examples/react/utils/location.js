@@ -1,7 +1,6 @@
 var loc = window.location;
 
 exports.back = () => {
-  History.length -= 1;
   window.history.back();
 };
 
