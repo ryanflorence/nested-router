@@ -45,8 +45,8 @@ var parseQuery = (query) => {
 };
 
 var parsePath = (path) => {
-  var split = path.split('?');
-  return { pathname: split[0], query: split[1] };
+  var [ pathname, query ] = path.split('?');
+  return { pathname, query };
 };
 
 var parseParams = (route, path) => {
