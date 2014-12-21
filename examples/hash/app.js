@@ -1,4 +1,4 @@
-var { map, match } = require('nested-router');
+var { map, match } = require('../../index');
 
 var link = (path, text) => {
   return `<a href="${path}">${text}</a>`;

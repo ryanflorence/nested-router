@@ -16,3 +16,8 @@ exports.getPath = () => {
   return window.location.hash.substr(1);
 };
 
+exports.listen = (listener) => {
+  window.addEventListener('hashchange', listener, false);
+  listener();
+};
+

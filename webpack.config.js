@@ -40,12 +40,6 @@ module.exports = {
     ]
   },
 
-  resolve: {
-    alias: {
-      'nested-router': '../../index'
-    }
-  },
-
   plugins: [
     new webpack.optimize.CommonsChunkPlugin('shared.js')
   ]
